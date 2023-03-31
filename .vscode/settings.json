@@ -1,0 +1,29 @@
+{
+    "files.associations": {
+        "x509.h": "c",
+        "x509_crt.h": "c",
+        "ctr_drbg.h": "c",
+        "psa_util.h": "c",
+        "x509_crl.h": "c",
+        "common.h": "c",
+        "string.h": "c",
+        "oid_custom.h": "c",
+        "stdlib.h": "c",
+        "cctype": "c",
+        "climits": "c",
+        "cmath": "c",
+        "cstdarg": "c",
+        "cstdio": "c",
+        "cstdlib": "c",
+        "type_traits": "c",
+        "limits": "c",
+        "*.tcc": "c",
+        "cinttypes": "c",
+        "cstdbool": "c",
+        "cstdint": "c",
+        "typeinfo": "c",
+        "stdio.h": "c",
+        "stdint.h": "c",
+        "libc-header-start.h": "c"
+    }
+}
