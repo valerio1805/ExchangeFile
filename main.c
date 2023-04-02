@@ -58,7 +58,31 @@ int main(){
     printf( "Errore2: %s\n", error_buf );
         return 0;
 
+} 
+  ret = mbedtls_x509write_crt_set_issuer_name_mod(&cert, "CN=example.com,O=Example Organization,L=San Francisco,C=US");
+  if( ret != 0 )
+  {
+    //mbedtls_strerror( ret, error_buf, 100 );
+    printf( "Errore3: %s\n", error_buf );
+        return 0;
+
+} 
+ret = mbedtls_x509write_crt_set_subject_name_mod(&cert, "CN=test.com,O=Test Organization,L=Italy,C=IT");
+  if( ret != 0 )
+  {
+    //mbedtls_strerror( ret, error_buf, 100 );
+    printf( "Errore3: %s\n", error_buf );
+        return 0;
+
+} 
+/*
+for(int i = 0; i < cert.ne_issue_arr;i++){
+  printf("Caratteristica letta:\n");
+  for(int j = 0; j<cert.issuer_arr[i].val.len; j++)
+    printf("%c", cert.issuer_arr[i].val.p_arr[j]);
+  printf("\n");
 }
+*/
   mbedtls_pk_context subj_key;
   mbedtls_pk_init(&subj_key);
 
@@ -83,6 +107,7 @@ int main(){
     printf( "Errore lettura chiave privata" );
     return 0;
   }
+
   unsigned char serial_test[] = {"0xa, 0xa, 0xA"} ;
   mbedtls_x509write_crt_set_subject_key(&cert, &subj_key);
   mbedtls_x509write_crt_set_issuer_key(&cert, &issu_key);
@@ -111,6 +136,13 @@ int main(){
         printf("Parsing corretto\n");
 
   }
+  /*
+  printf("Stampa dopo lettura pubblica\n");
+    for(int i =0; i <32; i ++){
+        printf("%02x",uff_cert.pk.pk_ctx.pub_key[i]);//   pk_ctx->pub_key[i]);
+    }
+  printf("\n");
+  */
   /*
   unsigned char* sig_oid;
   int sig_oid_len;
