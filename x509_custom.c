@@ -71,7 +71,7 @@ void mbedtls_ed25519_init(mbedtls_ed25519_context *ctx)
 static void ed25519_free_wrap(void *ctx)
 {
     mbedtls_ed25519_free((mbedtls_ed25519_context *) ctx);
-    mbedtls_free(ctx);
+    //mbedtls_free(ctx);
 }
 static int ed25519_check_pair_wrap(const void *pub, const void *prv,
                                int (*f_rng)(void *, unsigned char *, size_t),
@@ -221,18 +221,22 @@ void mbedtls_x509write_crt_init(mbedtls_x509write_cert *ctx)
     ctx->version = MBEDTLS_X509_CRT_VERSION_3;
     
 }
+/*
 int mbedtls_x509write_crt_set_subject_name(mbedtls_x509write_cert *ctx, const char *subject_name)
 {
     return mbedtls_x509_string_to_names(&ctx->subject, subject_name);
 }
-
+*/
+/*
 int mbedtls_x509write_crt_set_issuer_name(mbedtls_x509write_cert *ctx, const char *issuer_name){
 
     return mbedtls_x509_string_to_names(&ctx->issuer, issuer_name);
     //ctx->ne_issue_arr = 0;
     //return mbedtls_x509_string_to_names_mod(&ctx->issuer_arr, issuer_name, &ctx->ne_issue_arr);
 }
+*/
 
+/*
 int mbedtls_x509_string_to_names(mbedtls_asn1_named_data **head, const char *name)
 {
     int ret = 0;
@@ -244,7 +248,7 @@ int mbedtls_x509_string_to_names(mbedtls_asn1_named_data **head, const char *nam
     char data[MBEDTLS_X509_MAX_DN_NAME_SIZE];
     char *d = data;
 
-    /* Clear existing chain if present */
+    // Clear existing chain if present 
     mbedtls_asn1_free_named_data_list(head);
 
     while (c <= end) {
@@ -263,7 +267,7 @@ int mbedtls_x509_string_to_names(mbedtls_asn1_named_data **head, const char *nam
         if (!in_tag && *c == '\\' && c != end) {
             c++;
 
-            /* Check for valid escaped characters */
+            // Check for valid escaped characters 
             if (c == end || *c != ',') {
                 ret = MBEDTLS_ERR_X509_INVALID_NAME;
                 goto exit;
@@ -305,12 +309,13 @@ exit:
 
     return ret;
 }
+*/
 
-
+/*
 void mbedtls_asn1_free_named_data_list(mbedtls_asn1_named_data **head)
 {
     mbedtls_asn1_named_data *cur;
-
+    
     while ((cur = *head) != NULL) {
         *head = cur->next;
         mbedtls_free(cur->oid.p);
@@ -318,8 +323,13 @@ void mbedtls_asn1_free_named_data_list(mbedtls_asn1_named_data **head)
         mbedtls_free(cur);
     }
 }
+*/
+void mbedtls_asn1_free_named_data_list_mod(int *ne)
+{
+    *ne = 0;
+}
 
-
+/*
 mbedtls_asn1_named_data *mbedtls_asn1_store_named_data( mbedtls_asn1_named_data **head,const char *oid, size_t oid_len,const unsigned char *val,size_t val_len)
 {
     mbedtls_asn1_named_data *cur; 
@@ -360,20 +370,20 @@ mbedtls_asn1_named_data *mbedtls_asn1_store_named_data( mbedtls_asn1_named_data 
         mbedtls_free(cur->val.p);
         //cur->val.p = NULL;
     } else if (cur->val.len != val_len) {
-        /*
-         * Enlarge existing value buffer if needed
-         * Preserve old data until the allocation succeeded, to leave list in
-         * a consistent state in case allocation fails.
-         */
-        /*
-        void *p = mbedtls_calloc(1, val_len);
-        if (p == NULL) {
-            return NULL;
-        }
+        
+         //* Enlarge existing value buffer if needed
+         //* Preserve old data until the allocation succeeded, to leave list in
+         //* a consistent state in case allocation fails.
+         
+        
+        //void *p = mbedtls_calloc(1, val_len);
+        //if (p == NULL) {
+          //  return NULL;
+        //}
 
-        mbedtls_free(cur->val.p);
-        cur->val.p = p;
-        cur->val.len = val_len;*/
+        //mbedtls_free(cur->val.p);
+        //cur->val.p = p;
+        //cur->val.len = val_len;
     }
 
     if (val != NULL && val_len != 0) {
@@ -382,7 +392,7 @@ mbedtls_asn1_named_data *mbedtls_asn1_store_named_data( mbedtls_asn1_named_data 
 
     return cur;
 }
-
+*/
 mbedtls_asn1_named_data *asn1_find_named_data(mbedtls_asn1_named_data *list,const char *oid, size_t len)
 {
     while (list != NULL) {
@@ -534,8 +544,8 @@ void mbedtls_ed25519_free(mbedtls_ed25519_context *ctx)
     if (ctx == NULL) {
         return;
     }
-    mbedtls_free(ctx->priv_key);
-    mbedtls_free(ctx->pub_key);
+    //mbedtls_free(ctx->priv_key);
+    //mbedtls_free(ctx->pub_key);
    
 }
 
@@ -1268,11 +1278,11 @@ int mbedtls_x509_crt_parse_der_internal(mbedtls_x509_crt *chain, const unsigned 
         if (prev) {
             prev->next = NULL;
         }
-
+        /*
         if (crt != chain) {
             mbedtls_free(crt);
         }
-
+        */
         return ret;
     }
 
@@ -1323,7 +1333,7 @@ int x509_crt_parse_der_core(mbedtls_x509_crt *crt,
      */
     if ((ret = mbedtls_asn1_get_tag(&p, end, &len,
                                     MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE)) != 0) {
-        mbedtls_x509_crt_free(crt);
+        //mbedtls_x509_crt_free(crt);
         return MBEDTLS_ERR_X509_INVALID_FORMAT;
     }
 
@@ -1358,7 +1368,7 @@ int x509_crt_parse_der_core(mbedtls_x509_crt *crt,
 
     if ((ret = mbedtls_asn1_get_tag(&p, end, &len,
                                     MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE)) != 0) {
-        mbedtls_x509_crt_free(crt);
+        //mbedtls_x509_crt_free(crt);
         return MBEDTLS_ERROR_ADD(MBEDTLS_ERR_X509_INVALID_FORMAT, ret);
     }
 
@@ -1376,12 +1386,12 @@ int x509_crt_parse_der_core(mbedtls_x509_crt *crt,
         (ret = mbedtls_x509_get_serial(&p, end, &crt->serial)) != 0 ||
         (ret = mbedtls_x509_get_alg(&p, end, &crt->sig_oid,
                                     &sig_params1)) != 0) {
-        mbedtls_x509_crt_free(crt);
+        //mbedtls_x509_crt_free(crt);
         return ret;
     }
 
     if (crt->version < 0 || crt->version > 2) {
-        mbedtls_x509_crt_free(crt);
+        //mbedtls_x509_crt_free(crt);
         return MBEDTLS_ERR_X509_UNKNOWN_VERSION;
     }
 
@@ -1390,7 +1400,7 @@ int x509_crt_parse_der_core(mbedtls_x509_crt *crt,
     if ((ret = mbedtls_x509_get_sig_alg(&crt->sig_oid, &sig_params1,
                                         &crt->sig_md, &crt->sig_pk,
                                         &crt->sig_opts)) != 0) {
-        mbedtls_x509_crt_free(crt);
+        //mbedtls_x509_crt_free(crt);
         return ret;
     }
 
@@ -1401,7 +1411,7 @@ int x509_crt_parse_der_core(mbedtls_x509_crt *crt,
 
     if ((ret = mbedtls_asn1_get_tag(&p, end, &len,
                                     MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE)) != 0) {
-        mbedtls_x509_crt_free(crt);
+        //mbedtls_x509_crt_free(crt);
         return MBEDTLS_ERROR_ADD(MBEDTLS_ERR_X509_INVALID_FORMAT, ret);
     }
     
@@ -1421,7 +1431,7 @@ int x509_crt_parse_der_core(mbedtls_x509_crt *crt,
     }
     */
     if ((ret = mbedtls_x509_get_name_mod(&p, p + len, crt->issuer_arr, &crt->ne_issue_arr)) != 0) {
-        mbedtls_x509_crt_free(crt);
+        //mbedtls_x509_crt_free(crt);
         return ret;
     }
     /*
@@ -1442,7 +1452,7 @@ int x509_crt_parse_der_core(mbedtls_x509_crt *crt,
      */
     if ((ret = x509_get_dates(&p, end, &crt->valid_from,
                               &crt->valid_to)) != 0) {
-        mbedtls_x509_crt_free(crt);
+        //mbedtls_x509_crt_free(crt);
         return ret;
     }
 
@@ -1453,7 +1463,7 @@ int x509_crt_parse_der_core(mbedtls_x509_crt *crt,
 
     if ((ret = mbedtls_asn1_get_tag(&p, end, &len,
                                     MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE)) != 0) {
-        mbedtls_x509_crt_free(crt);
+        //mbedtls_x509_crt_free(crt);
         return MBEDTLS_ERROR_ADD(MBEDTLS_ERR_X509_INVALID_FORMAT, ret);
     }
     /*
@@ -1462,7 +1472,7 @@ int x509_crt_parse_der_core(mbedtls_x509_crt *crt,
         return ret;
     }*/
     if (len && (ret = mbedtls_x509_get_name_mod(&p, p + len, crt->subject_arr, &crt->ne_subje_arr)) != 0) {
-        mbedtls_x509_crt_free(crt);
+        //mbedtls_x509_crt_free(crt);
         return ret;
     }
     /*
@@ -1481,7 +1491,7 @@ int x509_crt_parse_der_core(mbedtls_x509_crt *crt,
      */
     crt->pk_raw.p = p;
     if ((ret = mbedtls_pk_parse_subpubkey(&p, end, &crt->pk)) != 0) {
-        mbedtls_x509_crt_free(crt);
+        //mbedtls_x509_crt_free(crt);
         return ret;
     }
     crt->pk_raw.len = p - crt->pk_raw.p;
@@ -1536,7 +1546,7 @@ int x509_crt_parse_der_core(mbedtls_x509_crt *crt,
      end = crt_end;
 
     if ((ret = mbedtls_x509_get_alg(&p, end, &sig_oid2, &sig_params2)) != 0) {
-        mbedtls_x509_crt_free(crt);
+        //mbedtls_x509_crt_free(crt);
         return ret;
     }
 
@@ -1546,17 +1556,17 @@ int x509_crt_parse_der_core(mbedtls_x509_crt *crt,
         sig_params1.len != sig_params2.len ||
         (sig_params1.len != 0 &&
          memcmp(sig_params1.p, sig_params2.p, sig_params1.len) != 0)) {
-        mbedtls_x509_crt_free(crt);
+        //mbedtls_x509_crt_free(crt);
         return MBEDTLS_ERR_X509_SIG_MISMATCH;
     }
 
     if ((ret = mbedtls_x509_get_sig(&p, end, &crt->sig)) != 0) {
-        mbedtls_x509_crt_free(crt);
+       // mbedtls_x509_crt_free(crt);
         return ret;
     }
 
     if (p != end) {
-        mbedtls_x509_crt_free(crt);
+        //mbedtls_x509_crt_free(crt);
         return MBEDTLS_ERROR_ADD(MBEDTLS_ERR_X509_INVALID_FORMAT,
                                  MBEDTLS_ERR_ASN1_LENGTH_MISMATCH);
     }
@@ -1646,6 +1656,7 @@ int mbedtls_asn1_get_len(unsigned char **p,
     return 0;
 }
 
+/*
 void mbedtls_x509_crt_free(mbedtls_x509_crt *crt)
 {
     mbedtls_x509_crt *cert_cur = crt;
@@ -1678,6 +1689,7 @@ void mbedtls_x509_crt_free(mbedtls_x509_crt *crt)
         }
     }
 }
+*/
 void mbedtls_pk_free(mbedtls_pk_context *ctx)
 {
     if (ctx == NULL) {
@@ -1717,13 +1729,16 @@ void mbedtls_platform_zeroize(void *buf, size_t len)
     }
 }
 */
+/*
 void mbedtls_asn1_free_named_data_list_shallow(mbedtls_asn1_named_data *name)
 {
     for (mbedtls_asn1_named_data *next; name != NULL; name = next) {
         next = name->next;
-        mbedtls_free(name);
+        //mbedtls_free(name);
     }
 }
+*/
+/*
 void mbedtls_asn1_sequence_free(mbedtls_asn1_sequence *seq)
 {
     while (seq != NULL) {
@@ -1732,6 +1747,7 @@ void mbedtls_asn1_sequence_free(mbedtls_asn1_sequence *seq)
         seq = next;
     }
 }
+*/
 int x509_get_version(unsigned char **p,
                             const unsigned char *end,
                             int *ver)
@@ -1905,6 +1921,7 @@ int mbedtls_x509_get_sig_alg(const mbedtls_x509_buf *sig_oid, const mbedtls_x509
     return 0;
 }
 
+/*
 int mbedtls_x509_get_name(unsigned char **p, const unsigned char *end,
                           mbedtls_x509_name *cur)
 {
@@ -1913,11 +1930,11 @@ int mbedtls_x509_get_name(unsigned char **p, const unsigned char *end,
     const unsigned char *end_set;
     mbedtls_x509_name *head = cur;
 
-    /* don't use recursion, we'd risk stack overflow if not optimized */
+    // don't use recursion, we'd risk stack overflow if not optimized 
     while (1) {
-        /*
-         * parse SET
-         */
+        //
+         //parse SET
+         //
         if ((ret = mbedtls_asn1_get_tag(p, end, &set_len,
                                         MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SET)) != 0) {
             ret = MBEDTLS_ERROR_ADD(MBEDTLS_ERR_X509_INVALID_NAME, ret);
@@ -1935,7 +1952,7 @@ int mbedtls_x509_get_name(unsigned char **p, const unsigned char *end,
                 break;
             }
 
-            /* Mark this item as being no the only one in a set */
+            // Mark this item as being no the only one in a set 
             cur->next_merged = 1;
 
             cur->next = mbedtls_calloc(1, sizeof(mbedtls_x509_name));
@@ -1948,9 +1965,9 @@ int mbedtls_x509_get_name(unsigned char **p, const unsigned char *end,
             cur = cur->next;
         }
 
-        /*
-         * continue until end of SEQUENCE is reached
-         */
+        //*
+         // continue until end of SEQUENCE is reached
+         //
         if (*p == end) {
             return 0;
         }
@@ -1966,12 +1983,13 @@ int mbedtls_x509_get_name(unsigned char **p, const unsigned char *end,
     }
 
 error:
-    /* Skip the first element as we did not allocate it */
+    // Skip the first element as we did not allocate it 
     mbedtls_asn1_free_named_data_list_shallow(head->next);
     head->next = NULL;
 
     return ret;
 }
+*/
 
 int x509_get_attr_type_value(unsigned char **p,
                                     const unsigned char *end,
@@ -2467,17 +2485,17 @@ int mbedtls_x509write_crt_set_extension(mbedtls_x509write_cert *ctx,
                                         int critical,
                                         const unsigned char *val, size_t val_len)
 {
-    return mbedtls_x509_set_extension(&ctx->extensions, oid, oid_len,
-                                      critical, val, val_len);
+    return mbedtls_x509_set_extension(ctx->extens_arr, oid, oid_len,
+                                      critical, val, val_len, &ctx->ne_ext_arr);
 }
 
-int mbedtls_x509_set_extension(mbedtls_asn1_named_data **head, const char *oid, size_t oid_len,
-                               int critical, const unsigned char *val, size_t val_len)
+int mbedtls_x509_set_extension(mbedtls_asn1_named_data *head, const char *oid, size_t oid_len,
+                               int critical, const unsigned char *val, size_t val_len, int *ne)
 {
     mbedtls_asn1_named_data *cur;
 
-    if ((cur = mbedtls_asn1_store_named_data(head, oid, oid_len,
-                                             NULL, val_len + 1)) == NULL) {
+    if ((/*cur =*/ mbedtls_asn1_store_named_data_mod(head, oid, oid_len,
+                                             NULL, val_len + 1, ne)) == 0) {
         return MBEDTLS_ERR_X509_ALLOC_FAILED;
     }
 
@@ -2571,7 +2589,7 @@ int mbedtls_x509_string_to_names_mod(mbedtls_asn1_named_data *head, const char *
     char *d = data;
 
     /* Clear existing chain if present */
-    //mbedtls_asn1_free_named_data_list(head);
+    mbedtls_asn1_free_named_data_list_mod(ne);
 
     while (c <= end) {
         if (in_tag && *c == '=') {
@@ -2635,10 +2653,8 @@ exit:
 
 int mbedtls_asn1_store_named_data_mod( mbedtls_asn1_named_data *head,const char *oid, size_t oid_len,const unsigned char *val,size_t val_len, int *ne)
 {
-     int pos;
+    int pos;
     if (asn1_find_named_data_mod(head, oid, oid_len, *ne) == 0) {
-        
-
         head[*ne].oid.len = oid_len;
         memcpy(head[*ne].oid.p_arr, oid, oid_len);
         head[*ne].val.len = val_len;
@@ -2761,7 +2777,7 @@ int mbedtls_x509_get_name_mod(unsigned char **p, const unsigned char *end,
 
 error:
     /* Skip the first element as we did not allocate it */
-    mbedtls_asn1_free_named_data_list_shallow(head->next);
+   // mbedtls_asn1_free_named_data_list_shallow(head->next);
     head->next = NULL;
 
     return ret;

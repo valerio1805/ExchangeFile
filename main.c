@@ -45,6 +45,7 @@ int main(){
   int ret;
   char error_buf[100];
 
+  /*
   ret = mbedtls_x509write_crt_set_subject_name(&cert, "CN=test.com,O=Test Organization,L=Italy,C=IT");
   if( ret != 0 )
   {
@@ -59,6 +60,7 @@ int main(){
         return 0;
 
 } 
+*/
   ret = mbedtls_x509write_crt_set_issuer_name_mod(&cert, "CN=example.com,O=Example Organization,L=San Francisco,C=US");
   if( ret != 0 )
   {
