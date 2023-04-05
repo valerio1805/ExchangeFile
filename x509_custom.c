@@ -901,11 +901,11 @@ int mbedtls_pk_write_pubkey_der(const mbedtls_pk_context *key, unsigned char *bu
 int mbedtls_pk_write_pubkey(unsigned char **p, unsigned char *start, const mbedtls_pk_context *key){
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     size_t len = 0;
-    MBEDTLS_ASN1_CHK_ADD(len, pk_write_ed25519_pubkey(p, start, mbedtls_pk_ed25519(*key)));
+    MBEDTLS_ASN1_CHK_ADD(len, pk_write_ed25519_pubkey(p, start, key->pk_ctx));
     return (int) len;
 }
 
-int pk_write_ed25519_pubkey(unsigned char **p, unsigned char *start, mbedtls_ed25519_context *ed25519){
+int pk_write_ed25519_pubkey(unsigned char **p, unsigned char *start, mbedtls_ed25519_context ed25519){
 
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     size_t len = 32;
@@ -918,7 +918,7 @@ int pk_write_ed25519_pubkey(unsigned char **p, unsigned char *start, mbedtls_ed2
     */
 
     for(int i = 0; i < 32; i ++){
-        buf[i] = ed25519->pub_key[i];
+        buf[i] = ed25519.pub_key[i];
     }
 
 
