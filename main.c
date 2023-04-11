@@ -138,13 +138,13 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
         printf("Parsing corretto\n");
 
   }
-  /*
+  
   printf("Stampa dopo lettura pubblica\n");
     for(int i =0; i <32; i ++){
         printf("%02x",uff_cert.pk.pk_ctx.pub_key[i]);//   pk_ctx->pub_key[i]);
     }
   printf("\n");
-  */
+  
   /*
   unsigned char* sig_oid;
   int sig_oid_len;

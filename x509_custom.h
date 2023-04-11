@@ -601,7 +601,7 @@ int mbedtls_x509write_crt_der(mbedtls_x509write_cert *ctx,
                               void *p_rng);
 int mbedtls_pk_write_pubkey_der(const mbedtls_pk_context *key, unsigned char *buf, size_t size);
 int mbedtls_pk_write_pubkey(unsigned char **p, unsigned char *start, const mbedtls_pk_context *key);     
-int pk_write_ed25519_pubkey(unsigned char **p, unsigned char *start, mbedtls_ed25519_context *ed25519);                       
+int pk_write_ed25519_pubkey(unsigned char **p, unsigned char *start, mbedtls_ed25519_context ed25519);                       
 int mbedtls_asn1_write_len(unsigned char **p, const unsigned char *start, size_t len);
 int mbedtls_asn1_write_tag(unsigned char **p, const unsigned char *start, unsigned char tag);
 int mbedtls_asn1_write_algorithm_identifier(unsigned char **p, const unsigned char *start,
