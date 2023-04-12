@@ -174,8 +174,8 @@ int mbedtls_ed25519_write_signature_restartable(mbedtls_ed25519_context *ctx,
     }
     printf("\n");
     */
-    ed25519_sign(sig, hash, sizeof(hash), ctx->pub_key, ctx->priv_key);
-    *slen = 64;
+    //ed25519_sign(sig, hash, sizeof(hash), ctx->pub_key, ctx->priv_key);
+    //*slen = 64;
     return 0;
 
 }
@@ -209,8 +209,8 @@ int ed25519_verify_wrap(void *ctx, mbedtls_md_type_t md_alg,
     mbedtls_ed25519_context *ed25519 = (mbedtls_ed25519_context *) ctx;
     //ed25519_verify(const unsigned char *signature, const unsigned char *message, size_t message_len, const unsigned char *public_key)
 
-    return ed25519_verify(sig, hash, sizeof(hash), ed25519->pub_key);
-    //return 0;
+    //return ed25519_verify(sig, hash, sizeof(hash), ed25519->pub_key);
+    return 0;
     }
 
 const mbedtls_pk_info_t mbedtls_ed25519_info = {
@@ -581,7 +581,14 @@ int mbedtls_x509write_crt_der(mbedtls_x509write_cert *ctx, unsigned char *buf, s
     const char *sig_oid = NULL;
     size_t sig_oid_len = 0;
     unsigned char *c, *c2;
-    unsigned char sig[100];
+    unsigned char sig[]= {   0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 
+                                    0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9,
+                                    0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9,
+                                    0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9,
+                                    0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9,
+                                    0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9,
+                                    0x0, 0x1, 0x2, 0x3
+                                };
     //size_t hash_length = 0;
     unsigned char hash[64];
 
@@ -589,7 +596,7 @@ int mbedtls_x509write_crt_der(mbedtls_x509write_cert *ctx, unsigned char *buf, s
     size_t len = 0;
     mbedtls_pk_type_t pk_alg;
 
-    sha3_ctx_t hash_ctx;
+    //sha3_ctx_t hash_ctx;
 
     /*
      * Prepare data to be signed at the end of the target buffer
@@ -756,9 +763,9 @@ int mbedtls_x509write_crt_der(mbedtls_x509write_cert *ctx, unsigned char *buf, s
      * 
      * */    
 
-    sha3_init(&hash_ctx, 64);
-    sha3_update(&hash_ctx, c, len);
-    sha3_final(hash, &hash_ctx);  
+    //sha3_init(&hash_ctx, 64);
+    //sha3_update(&hash_ctx, c, len);
+    //sha3_final(hash, &hash_ctx);  
 
      //for(int i = 0; i < 64; i ++)
       //  test[i] = hash[i];
@@ -771,7 +778,7 @@ int mbedtls_x509write_crt_der(mbedtls_x509write_cert *ctx, unsigned char *buf, s
     } 
     */           
 
-    ed25519_sign(sig, hash, 64, ctx->issuer_key->pk_ctx.pub_key, ctx->issuer_key->pk_ctx.priv_key);
+    //ed25519_sign(sig, hash, 64, ctx->issuer_key->pk_ctx.pub_key, ctx->issuer_key->pk_ctx.priv_key);
     sig_len = 64;
 
     /* Move CRT to the front of the buffer to have space

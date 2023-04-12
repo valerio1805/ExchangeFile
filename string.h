@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
-unsigned int strlen(const char *s);
+unsigned int my_strlen(const char *s);
 int my_strncmp( const char * s1, const char * s2, size_t n );
 char* my_strncpy(char* destination, const char* source, size_t num);
 void * my_memmove(void* dest, const void* src, unsigned int n);

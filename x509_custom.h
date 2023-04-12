@@ -1,7 +1,7 @@
 
 #include <stddef.h>
 #include "oid_custom.h"
-#include "ed25519/ed25519.h"
+//#include "ed25519/ed25519.h"
 
 //#include <stdlib.h>
 //#include <stdio.h>
