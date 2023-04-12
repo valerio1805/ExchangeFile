@@ -4,12 +4,12 @@
 #include <stdint.h>
 #include <stddef.h>
 unsigned int strlen(const char *s);
-int strncmp( const char * s1, const char * s2, size_t n );
-char* strncpy(char* destination, const char* source, size_t num);
-void * memmove(void* dest, const void* src, unsigned int n);
-int memcmp (const void *str1, const void *str2, size_t count);
-void* memset(void* dest, int byte, size_t len);
-void* memcpy(void* dest, const void* src, size_t len);
+int my_strncmp( const char * s1, const char * s2, size_t n );
+char* my_strncpy(char* destination, const char* source, size_t num);
+void * my_memmove(void* dest, const void* src, unsigned int n);
+int my_memcmp (const void *str1, const void *str2, size_t count);
+void* my_memset(void* dest, int byte, size_t len);
+void* my_memcpy(void* dest, const void* src, size_t len);
 
 
 /*

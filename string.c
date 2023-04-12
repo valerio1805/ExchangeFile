@@ -1,7 +1,7 @@
 #include "string.h"
 #include <stdlib.h>
 
-unsigned int strlen(const char *s)
+unsigned int my_strlen(const char *s)
 {
     unsigned int count = 0;
     while(*s!='\0')
@@ -12,7 +12,7 @@ unsigned int strlen(const char *s)
     return count;
 }
 
-int strncmp( const char * s1, const char * s2, size_t n )
+int my_strncmp( const char * s1, const char * s2, size_t n )
 {
     while ( n && *s1 && ( *s1 == *s2 ) )
     {
@@ -31,7 +31,7 @@ int strncmp( const char * s1, const char * s2, size_t n )
 }
 
 // Function to implement `my_strncpy()` function
-char* strncpy(char* destination, const char* source, size_t num)
+char* my_strncpy(char* destination, const char* source, size_t num)
 {
     // return if no memory is allocated to the destination
     if (destination == NULL) {
@@ -57,7 +57,7 @@ char* strncpy(char* destination, const char* source, size_t num)
     return ptr;
 }
 
-void * memmove(void* dest, const void* src, unsigned int n)
+void * my_memmove(void* dest, const void* src, unsigned int n)
 {
     char *pDest = (char *)dest;
     const char *pSrc =( const char*)src;
@@ -86,7 +86,7 @@ void * memmove(void* dest, const void* src, unsigned int n)
 }
 
 int
-memcmp (const void *str1, const void *str2, size_t count)
+my_memcmp (const void *str1, const void *str2, size_t count)
 {
     const unsigned char *s1 = (const unsigned char*)str1;
     const unsigned char *s2 = (const unsigned char*)str2;
@@ -99,7 +99,7 @@ memcmp (const void *str1, const void *str2, size_t count)
   return 0;
 }
 
-void* memcpy(void* dest, const void* src, size_t len)
+void* my_memcpy(void* dest, const void* src, size_t len)
 {
   const char* s = src;
   char *d = dest;
@@ -118,7 +118,7 @@ void* memcpy(void* dest, const void* src, size_t len)
   return dest;
 }
 
-void* memset(void* dest, int byte, size_t len)
+void* my_memset(void* dest, int byte, size_t len)
 {
   if ((((uintptr_t)dest | len) & (sizeof(uintptr_t)-1)) == 0) {
     uintptr_t word = byte & 0xFF;
