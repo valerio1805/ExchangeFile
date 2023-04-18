@@ -125,11 +125,19 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
   unsigned char cert_der[4096];
   size_t len_cert_der_tot = 4096;
   size_t effe_len_cert_der;
+
+  unsigned char oid_ext[] = {0xff, 0x20, 0xff};
+
+  unsigned char ext_val[] = {0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB};
+
+  mbedtls_x509write_crt_set_extension(&cert, oid_ext, 3, 0, ext_val, 11);
+
   ret = mbedtls_x509write_crt_der(&cert,cert_der,len_cert_der_tot,NULL,NULL);
   if (ret !=0){
     effe_len_cert_der = ret;
 
   }
+
   unsigned char *cert_real = cert_der;
   int dif = 4096-effe_len_cert_der;
   cert_real += dif;
@@ -144,6 +152,14 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
         printf("%02x",uff_cert.pk.pk_ctx.pub_key[i]);//   pk_ctx->pub_key[i]);
     }
   printf("\n");
+
+  printf("\nStampa hash inserito come extension\n");
+    for(int i =0; i <10; i ++){
+        printf("%02x",uff_cert.hash.p[i]);//   pk_ctx->pub_key[i]);
+    }
+  printf("\n");
+
+  
   
   /*
   unsigned char* sig_oid;

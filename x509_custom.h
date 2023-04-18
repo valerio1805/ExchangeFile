@@ -72,6 +72,23 @@ typedef __uint8_t uint8_t;
 #define MBEDTLS_BYTE_6(x) ((uint8_t) (((x) >> 48) & 0xff))
 #define MBEDTLS_BYTE_7(x) ((uint8_t) (((x) >> 56) & 0xff))
 
+#define MBEDTLS_X509_EXT_AUTHORITY_KEY_IDENTIFIER MBEDTLS_OID_X509_EXT_AUTHORITY_KEY_IDENTIFIER
+#define MBEDTLS_X509_EXT_SUBJECT_KEY_IDENTIFIER   MBEDTLS_OID_X509_EXT_SUBJECT_KEY_IDENTIFIER
+#define MBEDTLS_X509_EXT_KEY_USAGE                MBEDTLS_OID_X509_EXT_KEY_USAGE
+#define MBEDTLS_X509_EXT_CERTIFICATE_POLICIES     MBEDTLS_OID_X509_EXT_CERTIFICATE_POLICIES
+#define MBEDTLS_X509_EXT_POLICY_MAPPINGS          MBEDTLS_OID_X509_EXT_POLICY_MAPPINGS
+#define MBEDTLS_X509_EXT_SUBJECT_ALT_NAME         MBEDTLS_OID_X509_EXT_SUBJECT_ALT_NAME         /* Supported (DNS) */
+#define MBEDTLS_X509_EXT_ISSUER_ALT_NAME          MBEDTLS_OID_X509_EXT_ISSUER_ALT_NAME
+#define MBEDTLS_X509_EXT_SUBJECT_DIRECTORY_ATTRS  MBEDTLS_OID_X509_EXT_SUBJECT_DIRECTORY_ATTRS
+#define MBEDTLS_X509_EXT_BASIC_CONSTRAINTS        MBEDTLS_OID_X509_EXT_BASIC_CONSTRAINTS        /* Supported */
+#define MBEDTLS_X509_EXT_NAME_CONSTRAINTS         MBEDTLS_OID_X509_EXT_NAME_CONSTRAINTS
+#define MBEDTLS_X509_EXT_POLICY_CONSTRAINTS       MBEDTLS_OID_X509_EXT_POLICY_CONSTRAINTS
+#define MBEDTLS_X509_EXT_EXTENDED_KEY_USAGE       MBEDTLS_OID_X509_EXT_EXTENDED_KEY_USAGE
+#define MBEDTLS_X509_EXT_CRL_DISTRIBUTION_POINTS  MBEDTLS_OID_X509_EXT_CRL_DISTRIBUTION_POINTS
+#define MBEDTLS_X509_EXT_INIHIBIT_ANYPOLICY       MBEDTLS_OID_X509_EXT_INIHIBIT_ANYPOLICY
+#define MBEDTLS_X509_EXT_FRESHEST_CRL             MBEDTLS_OID_X509_EXT_FRESHEST_CRL
+#define MBEDTLS_X509_EXT_NS_CERT_TYPE             MBEDTLS_OID_X509_EXT_NS_CERT_TYPE
+#define INT_MAX         2147483647  
 
 /**
  * \name X509 Error codes
@@ -337,7 +354,7 @@ typedef struct mbedtls_x509write_cert {
     mbedtls_asn1_named_data subject_arr[10];
     int ne_issue_arr;
     int ne_subje_arr;
-     mbedtls_asn1_named_data extens_arr[10];
+    mbedtls_asn1_named_data extens_arr[2];
     int ne_ext_arr;
 
 }
@@ -423,6 +440,7 @@ typedef struct mbedtls_x509_crt {
     mbedtls_x509_buf issuer_id;         /**< Optional X.509 v2/v3 issuer unique identifier. */
     mbedtls_x509_buf subject_id;        /**< Optional X.509 v2/v3 subject unique identifier. */
     mbedtls_x509_buf v3_ext;            /**< Optional X.509 v3 extensions.  */
+    mbedtls_x509_buf hash;
     mbedtls_x509_sequence subject_alt_names;    /**< Optional list of raw entries of Subject Alternative Names extension (currently only dNSName, uniformResourceIdentifier and OtherName are listed). */
 
     mbedtls_x509_sequence certificate_policies; /**< Optional list of certificate policies (Only anyPolicy is printed and enforced, however the rest of the policies are still listed). */
@@ -711,3 +729,17 @@ int mbedtls_x509_get_alg_mod(unsigned char **p, const unsigned char *end,
 int mbedtls_x509_get_sig_alg_mod(const mbedtls_x509_buf_crt *sig_oid, const mbedtls_x509_buf *sig_params,
                              mbedtls_md_type_t *md_alg, mbedtls_pk_type_t *pk_alg,
                              void **sig_opts);
+int mbedtls_x509_get_ext(unsigned char **p, const unsigned char *end,
+                         mbedtls_x509_buf *ext, int tag);
+int mbedtls_asn1_get_bool(unsigned char **p,
+                          const unsigned char *end,
+                          int *val);
+int x509_write_extension_mod(unsigned char **p, unsigned char *start,
+                                mbedtls_asn1_named_data ext);
+int mbedtls_x509_write_extensions_mod(unsigned char **p, unsigned char *start,
+                                  mbedtls_asn1_named_data *arr_exte, int ne);
+int x509_get_crt_ext(unsigned char **p,
+                            const unsigned char *end,
+                            mbedtls_x509_crt *crt,
+                            mbedtls_x509_crt_ext_cb_t cb,
+                            void *p_ctx);
