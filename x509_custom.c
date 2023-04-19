@@ -3044,7 +3044,7 @@ int x509_get_crt_ext(unsigned char **p,
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     size_t len;
-    unsigned char *end_ext_data, *start_ext_octet, *end_ext_octet;
+    unsigned char *end_ext_data, /**start_ext_octet,*/ *end_ext_octet;
 
     if (*p == end) {
         return 0;
@@ -3095,7 +3095,7 @@ int x509_get_crt_ext(unsigned char **p,
             return MBEDTLS_ERROR_ADD(MBEDTLS_ERR_X509_INVALID_EXTENSIONS, ret);
         }
 
-        start_ext_octet = *p;
+        //start_ext_octet = *p;
         end_ext_octet = *p + len;
 
         if (end_ext_octet != end_ext_data) {

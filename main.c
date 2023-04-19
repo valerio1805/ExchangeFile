@@ -153,6 +153,11 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
 
   }
 
+  if (my_memcmp(uff_cert.hash.p, ext_val, 64) == 0)
+    printf("\nSono uguali\n");
+  else
+    printf("\nSono diversi\n");
+
   printf("Lunghezza del certificato\n");
   printf("%i",effe_len_cert_der);//   pk_ctx->pub_key[i]);
   printf("\n");
@@ -163,10 +168,7 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
     }
   printf("\n");
 
-  if (my_memcmp(uff_cert.hash.p, ext_val, 64) == 0)
-    printf("\nSono uguali\n");
-  else
-    printf("\nSono diversi\n");
+  
     /*
   printf("\nStampa hash inserito come extension\n");
     for(int i =0; i <10; i ++){
