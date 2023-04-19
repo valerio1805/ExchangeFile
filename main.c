@@ -122,15 +122,21 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
     printf( "Errore: %s\n", error_buf );
     return 0;
   }
-  unsigned char cert_der[4096];
-  size_t len_cert_der_tot = 4096;
+  unsigned char cert_der[512];
+  size_t len_cert_der_tot = 512;
   size_t effe_len_cert_der;
 
   unsigned char oid_ext[] = {0xff, 0x20, 0xff};
 
-  unsigned char ext_val[] = {0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB};
+  unsigned char ext_val[] = {0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
+                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
+                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
+                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
+                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
+                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
+                              0xff, 0x20, 0xff, 0xff};
 
-  mbedtls_x509write_crt_set_extension(&cert, oid_ext, 3, 0, ext_val, 11);
+  mbedtls_x509write_crt_set_extension(&cert, oid_ext, 3, 0, ext_val, 65);
 
   ret = mbedtls_x509write_crt_der(&cert,cert_der,len_cert_der_tot,NULL,NULL);
   if (ret !=0){
@@ -139,13 +145,17 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
   }
 
   unsigned char *cert_real = cert_der;
-  int dif = 4096-effe_len_cert_der;
+  int dif = 512-effe_len_cert_der;
   cert_real += dif;
 
   if ((ret = mbedtls_x509_crt_parse_der(&uff_cert, cert_real, effe_len_cert_der)) == 0){
-        printf("Parsing corretto\n");
+        printf("\nParsing corretto\n");
 
   }
+
+  printf("Lunghezza del certificato\n");
+  printf("%i",effe_len_cert_der);//   pk_ctx->pub_key[i]);
+  printf("\n");
   
   printf("Stampa dopo lettura pubblica\n");
     for(int i =0; i <32; i ++){
@@ -153,12 +163,17 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
     }
   printf("\n");
 
+  if (my_memcmp(uff_cert.hash.p, ext_val, 64) == 0)
+    printf("\nSono uguali\n");
+  else
+    printf("\nSono diversi\n");
+    /*
   printf("\nStampa hash inserito come extension\n");
     for(int i =0; i <10; i ++){
         printf("%02x",uff_cert.hash.p[i]);//   pk_ctx->pub_key[i]);
     }
   printf("\n");
-
+*/
   
   
   /*

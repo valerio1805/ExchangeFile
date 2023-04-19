@@ -3105,7 +3105,7 @@ int x509_get_crt_ext(unsigned char **p,
 
         crt ->hash.p = *p;
         crt ->hash.len = 64;
-        *p += 10;
+        *p += 64;
         /*
          * Detect supported extensions
          */
