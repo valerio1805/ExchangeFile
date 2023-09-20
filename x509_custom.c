@@ -3354,8 +3354,8 @@ int layer;
 int index;
 
 unsigned char flags;
-unsigned char vendorInfo[8];
-unsigned char type[8];
+unsigned char vendorInfo[16];
+unsigned char type[16];
 measure fwids[10];
 
 }dice_tcbInfo;
@@ -3388,11 +3388,15 @@ int mbedtls_x509write_crt_set_dice_tcbInfo(mbedtls_x509write_cert *ctx,
                                                      MBEDTLS_ASN1_SEQUENCE));
     
     MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_raw_buffer(&c, buf, info_struct.type,
-                                                        8));
-    MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_len(&c, buf, 8));
+                                                        16));
+    MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_len(&c, buf, 16));
+    MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_tag(c, buf, MBEDTLS_ASN1_OCTET_STRING));
+
     MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_raw_buffer(&c, buf, info_struct.vendorInfo,
-                                                        8));
-    MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_len(&c, buf, 8));
+                                                        16));
+    MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_len(&c, buf, 16));
+    MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_tag(c, buf, MBEDTLS_ASN1_OCTET_STRING));
+
     MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_raw_buffer(&c, buf, &info_struct.flags,
                                                         1));
     MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_len(&c, buf, 1));
