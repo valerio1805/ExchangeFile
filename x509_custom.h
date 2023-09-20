@@ -1,7 +1,8 @@
+#ifndef __X509CUSTOM_H__
+#define __X509CUSTOM_H__
 
 #include <stddef.h>
 #include "oid_custom.h"
-//#include "ed25519/ed25519.h"
 
 //#include <stdlib.h>
 //#include <stdio.h>
@@ -89,6 +90,7 @@ typedef __uint8_t uint8_t;
 #define MBEDTLS_X509_EXT_FRESHEST_CRL             MBEDTLS_OID_X509_EXT_FRESHEST_CRL
 #define MBEDTLS_X509_EXT_NS_CERT_TYPE             MBEDTLS_OID_X509_EXT_NS_CERT_TYPE
 #define INT_MAX         2147483647  
+
 
 /**
  * \name X509 Error codes
@@ -206,8 +208,14 @@ typedef enum {
     MBEDTLS_MD_SHA224,    /**< The SHA-224 message digest. */
     MBEDTLS_MD_SHA256,    /**< The SHA-256 message digest. */
     MBEDTLS_MD_SHA384,    /**< The SHA-384 message digest. */
-    MBEDTLS_MD_SHA512,    /**< The SHA-512 message digest. */
+
+    MBEDTLS_MD_SHA512,    /**< The SHA3-512 message digest. */
+
     MBEDTLS_MD_RIPEMD160, /**< The RIPEMD-160 message digest. */
+
+    //the algorithm used in the original Keystone project 
+    KEYSTONE_SHA3,
+
 } mbedtls_md_type_t;
 
 typedef enum {
@@ -278,7 +286,7 @@ struct mbedtls_pk_info_t {
                            void *p_rng);
 
     /** Allocate a new context */
-    /*void  mbedtls_ed25519_context (*ctx_alloc_func)(void); //(void)*/
+    /*void *  mbedtls_ed25519_context (*ctx_alloc_func)(void); //(void) */
 
     /** Free the given context */
     void (*ctx_free_func)(void *ctx);
@@ -589,7 +597,7 @@ int mbedtls_x509write_crt_set_validity(mbedtls_x509write_cert *ctx, const char *
 void mbedtls_pk_init(mbedtls_pk_context *ctx);     
 size_t ed25519_get_bitlen(const void *ctx);
 int ed25519_can_do(mbedtls_pk_type_t type);
-void /*mbedtls_ed25519_context*/ ed25519_alloc_wrap(void);
+void/* mbedtls_ed25519_context*/ ed25519_alloc_wrap(void);
 void ed25519_free_wrap(void *ctx);
 int mbedtls_ed25519_check_pub_priv(unsigned char* priv, unsigned char* pub, unsigned char* seed);
 int ed25519_check_pair_wrap(const void *pub, const void *prv, int (*f_rng)(void *, unsigned char *, size_t), void *p_rng);
@@ -617,7 +625,7 @@ void mbedtls_ed25519_init(mbedtls_ed25519_context *ctx);
 int mbedtls_x509write_crt_der(mbedtls_x509write_cert *ctx,
                               unsigned char *buf, size_t size,
                               int (*f_rng)(void *, unsigned char *, size_t),
-                              void *p_rng);//, unsigned char* test);
+                              void *p_rng);//, unsigned char* test, int *l_topass);
 int mbedtls_pk_write_pubkey_der(const mbedtls_pk_context *key, unsigned char *buf, size_t size);
 int mbedtls_pk_write_pubkey(unsigned char **p, unsigned char *start, const mbedtls_pk_context *key);     
 int pk_write_ed25519_pubkey(unsigned char **p, unsigned char *start, mbedtls_ed25519_context ed25519);                       
@@ -659,7 +667,7 @@ int mbedtls_x509write_crt_set_serial_raw(mbedtls_x509write_cert *ctx,
                                          unsigned char *serial, size_t serial_len);        
 void mbedtls_x509write_crt_set_md_alg(mbedtls_x509write_cert *ctx, mbedtls_md_type_t md_alg); 
 int mbedtls_x509_crt_parse_der(mbedtls_x509_crt *chain,  unsigned char *buf, size_t buflen);                                                       
-int mbedtls_x509_crt_parse_der_internal(mbedtls_x509_crt *chain, unsigned char *buf, size_t buflen, int make_copy,
+int mbedtls_x509_crt_parse_der_internal(mbedtls_x509_crt *chain,  unsigned char *buf, size_t buflen, int make_copy,
                                                mbedtls_x509_crt_ext_cb_t cb, void *p_ctx);
 void mbedtls_x509_crt_init(mbedtls_x509_crt *crt);
 int x509_crt_parse_der_core(mbedtls_x509_crt *crt, unsigned char *buf,size_t buflen, int make_copy, mbedtls_x509_crt_ext_cb_t cb, void *p_ctx);
@@ -678,7 +686,6 @@ int mbedtls_x509_get_serial(unsigned char **p, const unsigned char *end, mbedtls
 int mbedtls_x509_get_alg(unsigned char **p, const unsigned char *end, mbedtls_x509_buf_crt *alg, mbedtls_x509_buf *params);
 int mbedtls_asn1_get_alg(unsigned char **p, const unsigned char *end,mbedtls_asn1_buf *alg, mbedtls_asn1_buf *params);
 //int mbedtls_x509_get_sig_alg(const mbedtls_x509_buf_crt *sig_oid, const mbedtls_x509_buf_crt *sig_params,mbedtls_md_type_t *md_alg, mbedtls_pk_type_t *pk_alg, void **sig_opts);
-
 int mbedtls_x509_get_name(unsigned char **p, const unsigned char *end, mbedtls_x509_name *cur);
 int x509_get_attr_type_value(unsigned char **p, const unsigned char *end, mbedtls_x509_name *cur);
 void mbedtls_asn1_free_named_data_list_shallow(mbedtls_asn1_named_data *name);
@@ -696,8 +703,8 @@ int mbedtls_x509_write_extensions(unsigned char **p, unsigned char *start,  mbed
 int x509_write_extension(unsigned char **p, unsigned char *start, mbedtls_asn1_named_data *ext);
 int mbedtls_asn1_write_bool(unsigned char **p, const unsigned char *start, int boolean);
 int mbedtls_x509_set_extension(mbedtls_asn1_named_data *head, const char *oid, size_t oid_len,
-                               int critical, const unsigned char *val, size_t val_len, int *ne);
-int mbedtls_x509write_crt_set_extension(mbedtls_x509write_cert *ctx,  const char *oid, size_t oid_len, int critical, const unsigned char *val, size_t val_len);
+                               int critical, /*const*/ unsigned char *val, size_t val_len, int *ne);
+int mbedtls_x509write_crt_set_extension(mbedtls_x509write_cert *ctx,  const char *oid, size_t oid_len, int critical, /*const*/ unsigned char *val, size_t val_len);
 int x509_get_uid(unsigned char **p, const unsigned char *end,mbedtls_x509_buf *uid, int n);
 int pk_get_pk_alg(unsigned char **p,
                          const unsigned char *end,
@@ -743,3 +750,11 @@ int x509_get_crt_ext(unsigned char **p,
                             mbedtls_x509_crt *crt,
                             mbedtls_x509_crt_ext_cb_t cb,
                             void *p_ctx);
+int x509_get_basic_constraints(unsigned char **p,
+                                      const unsigned char *end,
+                                      int *ca_istrue,
+                                      int *max_pathlen);
+int mbedtls_x509write_crt_set_basic_constraints(mbedtls_x509write_cert *ctx,
+                                                int is_ca, int max_pathlen);
+#endif
+  

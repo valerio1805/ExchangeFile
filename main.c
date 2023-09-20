@@ -153,7 +153,8 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
 
   }
 
-  if (my_memcmp(uff_cert.hash.p, ext_val, 64) == 0)
+
+  if (my_memcmp(uff_cert.hash.p_arr, ext_val, 64) == 0)
     printf("\nSono uguali\n");
   else
     printf("\nSono diversi\n");
