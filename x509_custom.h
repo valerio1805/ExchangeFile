@@ -409,6 +409,32 @@ typedef struct mbedtls_x509_time {
 }
 mbedtls_x509_time;
 
+typedef struct measure{
+    unsigned char OID_algho[10];
+    int oid_len;
+    unsigned char digest[64];
+}measure;
+
+typedef struct dice_tcbInfo{
+
+  unsigned char vendor[32];
+  int l_ven;
+  unsigned char model[32];
+  int l_mod;
+  unsigned char version[32];
+  int l_ver;
+  int svn;
+  int layer;
+  int index;
+  unsigned char flags[4];
+  unsigned char vendorInfo[16];
+  int l_vi;
+  unsigned char type[16];
+  int l_ty;
+  measure fwids[10];
+
+}dice_tcbInfo;
+
 /**
  * Container for an X.509 certificate. The certificate may be chained.
  *
@@ -437,6 +463,7 @@ typedef struct mbedtls_x509_crt {
     mbedtls_asn1_named_data subject_arr[10];
     int ne_issue_arr;
     int ne_subje_arr;
+    dice_tcbInfo dice_tcb_info;
 
 
     mbedtls_x509_time valid_from;       /**< Start time of certificate validity. */
@@ -756,5 +783,24 @@ int x509_get_basic_constraints(unsigned char **p,
                                       int *max_pathlen);
 int mbedtls_x509write_crt_set_basic_constraints(mbedtls_x509write_cert *ctx,
                                                 int is_ca, int max_pathlen);
+void set_dice_tcbInfo(dice_tcbInfo* tcbInfo);
+void init_dice_tcbInfo(dice_tcbInfo* tcbInfo);
+
+int mbedtls_x509write_crt_set_dice_tcbInfo(mbedtls_x509write_cert *ctx,
+                                                dice_tcbInfo info_struct);
+
+int x509_get_dice_tcbInfo(unsigned char **p,
+                                      const unsigned char *end,
+                                      dice_tcbInfo* info_struct);  
+int setting_tcbInfo(dice_tcbInfo* dice_tcbInfo, unsigned char vendor[], int l_ven, unsigned char model[], int l_m, unsigned char version[], int l_ver,
+                            int svn, int layer, int index, unsigned char flags[], int l_f, unsigned char vendor_info[], int l_vf, unsigned char type[], int l_t,
+                            measure measures[], int l_mea);   
+
+void set_dice_tcbInfo_vendor(dice_tcbInfo* tcbInfo, unsigned char vendor[], int lv);
+void set_dice_tcbInfo_version(dice_tcbInfo* tcbInfo, unsigned char version[], int lv);
+void set_dice_tcbInfo_model(dice_tcbInfo* tcbInfo, unsigned char model[], int l);
+void set_dice_tcbInfo_vi(dice_tcbInfo* tcbInfo, unsigned char vi[], int l);
+void set_dice_tcbInfo_type(dice_tcbInfo* tcbInfo, unsigned char type[], int l);
+void set_dice_tcbInfo_measure(dice_tcbInfo* tcbInfo, measure m);                                                                  
 #endif
   

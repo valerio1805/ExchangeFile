@@ -93,8 +93,23 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
 
   mbedtls_x509_crt uff_cert;
   mbedtls_x509_crt_init(&uff_cert);
-
+  dice_tcbInfo test;
+  init_dice_tcbInfo(&test);
   
+  //set_dice_tcbInfo_vendor(&test, "ciao mi chiamo", 14);
+  //set_dice_tcbInfo_model(&test, "valerio donnini", 15);
+  measure m;
+  for (int i = 0; i < 64; i ++)
+    m.digest[i] = i;
+
+  for(int i = 0; i < 3; i++)
+    m.OID_algho[i] = i;
+  
+  m.oid_len = 3;
+  set_dice_tcbInfo_measure(&test, m);
+
+
+
   ret = mbedtls_pk_parse_public_key(&subj_key, sanctum_eca_key_pub, 32, 0);
   if( ret != 0 )
   {
@@ -122,22 +137,24 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
     printf( "Errore: %s\n", error_buf );
     return 0;
   }
-  unsigned char cert_der[512];
-  size_t len_cert_der_tot = 512;
+  unsigned char cert_der[1024];
+  size_t len_cert_der_tot = 1024;
   size_t effe_len_cert_der;
 
   unsigned char oid_ext[] = {0xff, 0x20, 0xff};
+  
+  unsigned char ext_val[64];/* = {0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
+                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
+                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
+                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
+                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
+                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
+                              0xff, 0x20, 0xff, 0xff}; */
 
-  unsigned char ext_val[] = {0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
-                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
-                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
-                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
-                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
-                              0xff, 0x20, 0xff,0xff, 0x20, 0xff,0xff, 0x20, 0xff, 0xAB,
-                              0xff, 0x20, 0xff, 0xff};
+ // mbedtls_x509write_crt_set_extension(&cert, oid_ext, 3, 0, ext_val, 65);
 
-  mbedtls_x509write_crt_set_extension(&cert, oid_ext, 3, 0, ext_val, 65);
-
+  mbedtls_x509write_crt_set_basic_constraints(&cert, 1, 10);
+  mbedtls_x509write_crt_set_dice_tcbInfo(&cert, test);
   ret = mbedtls_x509write_crt_der(&cert,cert_der,len_cert_der_tot,NULL,NULL);
   if (ret !=0){
     effe_len_cert_der = ret;
@@ -145,7 +162,7 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
   }
 
   unsigned char *cert_real = cert_der;
-  int dif = 512-effe_len_cert_der;
+  int dif = 1024-effe_len_cert_der;
   cert_real += dif;
 
   if ((ret = mbedtls_x509_crt_parse_der(&uff_cert, cert_real, effe_len_cert_der)) == 0){
@@ -153,11 +170,19 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
 
   }
 
+  for(int i = 0; i< 64 ;i ++)
+       ext_val[i] = i;
 
+  if (my_memcmp(uff_cert.dice_tcb_info.fwids[0].digest, ext_val, 64) == 0)
+    printf("\nSono uguali\n");
+  else
+    printf("\nSono diversi\n");
+  /*
   if (my_memcmp(uff_cert.hash.p_arr, ext_val, 64) == 0)
     printf("\nSono uguali\n");
   else
     printf("\nSono diversi\n");
+  */
 
   printf("Lunghezza del certificato\n");
   printf("%i",effe_len_cert_der);//   pk_ctx->pub_key[i]);
