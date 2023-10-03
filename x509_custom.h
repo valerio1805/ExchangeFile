@@ -431,7 +431,7 @@ typedef struct dice_tcbInfo{
   int l_vi;
   unsigned char type[16];
   int l_ty;
-  measure fwids[10];
+  measure fwids[2];
 
 }dice_tcbInfo;
 
@@ -787,7 +787,10 @@ void set_dice_tcbInfo(dice_tcbInfo* tcbInfo);
 void init_dice_tcbInfo(dice_tcbInfo* tcbInfo);
 
 int mbedtls_x509write_crt_set_dice_tcbInfo(mbedtls_x509write_cert *ctx,
-                                                dice_tcbInfo info_struct);
+                                                dice_tcbInfo info_struct, int dim, unsigned char buf[], size_t buf_size);
+
+/*int mbedtls_x509write_crt_set_dice_tcbInfo(mbedtls_x509write_cert *ctx,
+                                                dice_tcbInfo info_struct);*/
 
 int x509_get_dice_tcbInfo(unsigned char **p,
                                       const unsigned char *end,

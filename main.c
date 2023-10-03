@@ -154,7 +154,10 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
  // mbedtls_x509write_crt_set_extension(&cert, oid_ext, 3, 0, ext_val, 65);
 
   mbedtls_x509write_crt_set_basic_constraints(&cert, 1, 10);
-  mbedtls_x509write_crt_set_dice_tcbInfo(&cert, test);
+  int dim = sizeof(test);
+  unsigned char buf[dim];
+
+  mbedtls_x509write_crt_set_dice_tcbInfo(&cert, test, dim, buf, sizeof(buf));
   ret = mbedtls_x509write_crt_der(&cert,cert_der,len_cert_der_tot,NULL,NULL);
   if (ret !=0){
     effe_len_cert_der = ret;

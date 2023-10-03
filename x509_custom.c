@@ -3359,7 +3359,7 @@ void init_dice_tcbInfo(dice_tcbInfo* tcbInfo){
     tcbInfo ->l_vi = 0;
     tcbInfo ->type[0] = '\0';
     tcbInfo->l_ty = 0;
-    for(int i = 0; i < 10; i ++){
+    for(int i = 0; i < 2; i ++){
         tcbInfo->fwids[i].digest[0] ='\0';
         tcbInfo->fwids[i].OID_algho[0] = '0';
         tcbInfo->fwids[i].oid_len = 0;
@@ -3417,14 +3417,16 @@ int setting_tcbInfo(dice_tcbInfo* dice_tcbInfo, unsigned char vendor[] , int l_v
 
 
 
+/*int mbedtls_x509write_crt_set_dice_tcbInfo(mbedtls_x509write_cert *ctx,
+                                                dice_tcbInfo info_struct)*/
 
 int mbedtls_x509write_crt_set_dice_tcbInfo(mbedtls_x509write_cert *ctx,
-                                                dice_tcbInfo info_struct)
+                                                dice_tcbInfo info_struct, int dim, unsigned char buf[], size_t buf_size)
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
-    int dim = sizeof(info_struct);
-    unsigned char buf[dim];
-    unsigned char *c = buf + sizeof(buf);
+    //int dim = sizeof(info_struct);
+    //unsigned char buf[dim];
+    unsigned char *c = buf + buf_size; //sizeof(buf);
     size_t len = 0;
 
     //my_memset(buf, 0, 9);
