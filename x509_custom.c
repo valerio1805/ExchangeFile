@@ -2686,7 +2686,7 @@ int mbedtls_x509_set_extension(mbedtls_asn1_named_data *head, const char *oid, s
  */
 int x509_get_uid(unsigned char **p,
                         const unsigned char *end,
-                        mbedtls_x509_buf *uid, int n)
+                        mbedtls_x509_buf_crt *uid, int n)
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
 
@@ -3252,7 +3252,7 @@ int x509_get_crt_ext(unsigned char **p,
 }
 
 int mbedtls_x509_get_ext(unsigned char **p, const unsigned char *end,
-                         mbedtls_x509_buf *ext, int tag)
+                         mbedtls_x509_buf_crt *ext, int tag);
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     size_t len;

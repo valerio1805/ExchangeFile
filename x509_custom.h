@@ -472,10 +472,10 @@ typedef struct mbedtls_x509_crt {
     mbedtls_x509_buf pk_raw;
     mbedtls_pk_context pk;              /**< Container for the public key context. */
 
-    mbedtls_x509_buf issuer_id;         /**< Optional X.509 v2/v3 issuer unique identifier. */
-    mbedtls_x509_buf subject_id;        /**< Optional X.509 v2/v3 subject unique identifier. */
-    mbedtls_x509_buf v3_ext;            /**< Optional X.509 v3 extensions.  */
-    mbedtls_x509_buf hash;
+    mbedtls_x509_buf_crt issuer_id;         /**< Optional X.509 v2/v3 issuer unique identifier. */
+    mbedtls_x509_buf_crt subject_id;        /**< Optional X.509 v2/v3 subject unique identifier. */
+    mbedtls_x509_buf_crt v3_ext;            /**< Optional X.509 v3 extensions.  */
+    //mbedtls_x509_buf hash;
     mbedtls_x509_sequence subject_alt_names;    /**< Optional list of raw entries of Subject Alternative Names extension (currently only dNSName, uniformResourceIdentifier and OtherName are listed). */
 
     mbedtls_x509_sequence certificate_policies; /**< Optional list of certificate policies (Only anyPolicy is printed and enforced, however the rest of the policies are still listed). */
@@ -732,7 +732,6 @@ int mbedtls_asn1_write_bool(unsigned char **p, const unsigned char *start, int b
 int mbedtls_x509_set_extension(mbedtls_asn1_named_data *head, const char *oid, size_t oid_len,
                                int critical, /*const*/ unsigned char *val, size_t val_len, int *ne);
 int mbedtls_x509write_crt_set_extension(mbedtls_x509write_cert *ctx,  const char *oid, size_t oid_len, int critical, /*const*/ unsigned char *val, size_t val_len);
-int x509_get_uid(unsigned char **p, const unsigned char *end,mbedtls_x509_buf *uid, int n);
 int pk_get_pk_alg(unsigned char **p,
                          const unsigned char *end,
                          mbedtls_pk_type_t *pk_alg, mbedtls_asn1_buf *params);
@@ -763,8 +762,6 @@ int mbedtls_x509_get_alg_mod(unsigned char **p, const unsigned char *end,
 int mbedtls_x509_get_sig_alg_mod(const mbedtls_x509_buf_crt *sig_oid, const mbedtls_x509_buf *sig_params,
                              mbedtls_md_type_t *md_alg, mbedtls_pk_type_t *pk_alg,
                              void **sig_opts);
-int mbedtls_x509_get_ext(unsigned char **p, const unsigned char *end,
-                         mbedtls_x509_buf *ext, int tag);
 int mbedtls_asn1_get_bool(unsigned char **p,
                           const unsigned char *end,
                           int *val);
@@ -805,5 +802,20 @@ void set_dice_tcbInfo_model(dice_tcbInfo* tcbInfo, unsigned char model[], int l)
 void set_dice_tcbInfo_vi(dice_tcbInfo* tcbInfo, unsigned char vi[], int l);
 void set_dice_tcbInfo_type(dice_tcbInfo* tcbInfo, unsigned char type[], int l);
 void set_dice_tcbInfo_measure(dice_tcbInfo* tcbInfo, measure m);                                                                  
+
+/*
+int mbedtls_x509_get_ext(unsigned char **p, const unsigned char *end,
+                         mbedtls_x509_buf *ext, int tag);
+*/
+int mbedtls_x509_get_ext(unsigned char **p, const unsigned char *end,
+                         mbedtls_x509_buf_crt *ext, int tag);
+int x509_get_uid(unsigned char **p,
+                        const unsigned char *end,
+                        mbedtls_x509_buf_crt *uid, int n);
+        /*
+int x509_get_uid(unsigned char **p, const unsigned char *end,mbedtls_x509_buf *uid, int n);
+
+        */
+
 #endif
   
