@@ -197,6 +197,17 @@ for(int i = 0; i < cert.ne_issue_arr;i++){
     }
   printf("\n");
 
+  for(int i = 0; i <uff_cert.ne_issue_arr; i++){
+    for(int j = 0; j<uff_cert.issuer_arr[i].val.len; j++)
+      printf("%c", uff_cert.issuer_arr[i].val.p[j]);
+    printf("\n");
+  }
+  for(int i = 0; i <uff_cert.ne_subje_arr; i++){
+    for(int j = 0; j<uff_cert.subject_arr[i].val.len; j++)
+      printf("%c", uff_cert.subject_arr[i].val.p[j]);
+    printf("\n");
+  }
+
   
     /*
   printf("\nStampa hash inserito come extension\n");

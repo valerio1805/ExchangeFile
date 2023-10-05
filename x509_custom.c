@@ -2911,12 +2911,12 @@ int x509_write_name_mod(unsigned char **p,
 }
 
 int mbedtls_x509_get_name_mod(unsigned char **p, const unsigned char *end,
-                          mbedtls_x509_name *cur, int *ne)
+                          mbedtls_x509_name_noarr *cur, int *ne)
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     size_t set_len;
     const unsigned char *end_set;
-    mbedtls_x509_name *head = cur;
+    mbedtls_x509_name_noarr *head = cur;
     *ne = 0;
 
     /* don't use recursion, we'd risk stack overflow if not optimized */
@@ -2962,12 +2962,12 @@ error:
 
 int x509_get_attr_type_value_mod(unsigned char **p,
                                     const unsigned char *end,
-                                    mbedtls_asn1_named_data *cur)
+                                    mbedtls_asn1_named_data_noarr *cur)
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     size_t len;
-    mbedtls_x509_buf *oid;
-    mbedtls_x509_buf *val;
+    mbedtls_x509_buf_crt *oid;
+    mbedtls_x509_buf_crt *val;
 
     if ((ret = mbedtls_asn1_get_tag(p, end, &len,
                                     MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE)) != 0) {
@@ -3252,7 +3252,7 @@ int x509_get_crt_ext(unsigned char **p,
 }
 
 int mbedtls_x509_get_ext(unsigned char **p, const unsigned char *end,
-                         mbedtls_x509_buf_crt *ext, int tag);
+                         mbedtls_x509_buf_crt *ext, int tag)
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     size_t len;

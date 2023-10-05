@@ -344,6 +344,28 @@ typedef struct mbedtls_asn1_named_data {
 }
 mbedtls_asn1_named_data;
 
+typedef struct mbedtls_asn1_named_data_noarr {
+    mbedtls_asn1_buf_no_arr oid;                   /**< The object identifier. */
+    mbedtls_asn1_buf_no_arr val;                   /**< The named value. */
+
+    /** The next entry in the sequence.
+     *
+     * The details of memory management for named data sequences are not
+     * documented and may change in future versions. Set this field to \p NULL
+     * when initializing a structure, and do not modify it except via Mbed TLS
+     * library functions.
+     */
+    struct mbedtls_asn1_named_data *next;
+
+    /** Merge next item into the current one?
+     *
+     * This field exists for the sake of Mbed TLS's X.509 certificate parsing
+     * code and may change in future versions of the library.
+     */
+    unsigned char MBEDTLS_PRIVATE(next_merged);
+}
+mbedtls_asn1_named_data_noarr;
+
 typedef struct mbedtls_x509write_cert {
     int MBEDTLS_PRIVATE(version);
     unsigned char MBEDTLS_PRIVATE(serial)[MBEDTLS_X509_RFC5280_MAX_SERIAL_LEN];
@@ -401,6 +423,7 @@ mbedtls_asn1_sequence;
 typedef mbedtls_asn1_buf_no_arr mbedtls_x509_buf_crt;
 typedef mbedtls_asn1_buf mbedtls_x509_buf;
 typedef mbedtls_asn1_named_data mbedtls_x509_name;
+typedef mbedtls_asn1_named_data_noarr mbedtls_x509_name_noarr;
 typedef mbedtls_asn1_sequence mbedtls_x509_sequence;
 
 typedef struct mbedtls_x509_time {
@@ -459,8 +482,8 @@ typedef struct mbedtls_x509_crt {
     //mbedtls_x509_name subject;          /**< The parsed subject data (named information object). */
     //mbedtls_asn1_named_data issuer_name[10];
     //mbedtls_asn1_named_data subject_name[10];
-    mbedtls_asn1_named_data issuer_arr[10];
-    mbedtls_asn1_named_data subject_arr[10];
+    mbedtls_asn1_named_data_noarr issuer_arr[10];
+    mbedtls_asn1_named_data_noarr subject_arr[10];
     int ne_issue_arr;
     int ne_subje_arr;
     dice_tcbInfo dice_tcb_info;
@@ -751,8 +774,8 @@ int asn1_find_named_data_mod(mbedtls_asn1_named_data *list,const char *oid, size
 int mbedtls_x509write_crt_set_subject_name_mod(mbedtls_x509write_cert *ctx, const char *subject_name);
 int x509_write_name_mod(unsigned char **p, unsigned char *start,mbedtls_asn1_named_data cur_name);
 int mbedtls_x509_write_names_mod(unsigned char **p, unsigned char *start,mbedtls_asn1_named_data *arr, int ne);
-int x509_get_attr_type_value_mod(unsigned char **p,const unsigned char *end, mbedtls_asn1_named_data *cur);
-int mbedtls_x509_get_name_mod(unsigned char **p, const unsigned char *end, mbedtls_asn1_named_data *cur, int *ne);
+int x509_get_attr_type_value_mod(unsigned char **p,const unsigned char *end, mbedtls_asn1_named_data_noarr *cur);
+int mbedtls_x509_get_name_mod(unsigned char **p, const unsigned char *end, mbedtls_asn1_named_data_noarr *cur, int *ne);
 void mbedtls_asn1_free_named_data_list_mod(int *ne);
 int mbedtls_asn1_get_alg_mod(unsigned char **p,
                          const unsigned char *end,
